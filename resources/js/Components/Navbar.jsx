@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Dialog, DialogPanel } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 
@@ -10,10 +10,28 @@ const navigation = [
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10)
+    }
+
+    handleScroll()
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   return (
-    <header className="absolute inset-x-0 top-0 z-50">
-      <nav aria-label="Global" className="flex items-center justify-between p-6 lg:px-8">
+    <header className="fixed inset-x-0 top-0 z-50">
+      <nav
+        aria-label="Global"
+        className={`flex items-center justify-between border-b p-6 transition lg:px-8 ${
+          isScrolled
+            ? 'border-gray-200 bg-white/70 shadow-lg backdrop-blur'
+            : 'border-transparent bg-white shadow-none'
+        }`}
+      >
         <div className="flex lg:flex-1">
           <a href="#" className="-m-1.5 p-1.5">
             <span className="sr-only">Your Company</span>
@@ -36,7 +54,11 @@ export default function Navbar() {
         </div>
         <div className="hidden lg:flex lg:gap-x-12">
           {navigation.map((item) => (
-            <a key={item.name} href={item.href} className="text-sm/6 font-semibold text-gray-900 hover:text-[#2A96CD]">
+            <a
+              key={item.name}
+              href={item.href}
+              className="rounded-md px-3 py-2 text-sm/6 font-semibold text-gray-900 transition hover:bg-[#2A96CD] hover:text-white"
+            >
               {item.name}
             </a>
           ))}
