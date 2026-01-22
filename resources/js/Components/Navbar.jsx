@@ -3,8 +3,8 @@ import { Dialog, DialogPanel } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 
 const navigation = [
-  { name: 'About Us', href: '#' },
-  { name: 'Event', href: '#' },
+  { name: 'About Us', href: '/about' },
+  { name: 'Event', href: '' },
   { name: 'Blog', href: '#' },
 ]
 
@@ -33,7 +33,7 @@ export default function Navbar() {
         }`}
       >
         <div className="flex lg:flex-1">
-          <a href="#" className="-m-1.5 p-1.5">
+          <a href="/" className="-m-1.5 p-1.5">
             <span className="sr-only">Your Company</span>
             <img
               alt="LamonganDev"
