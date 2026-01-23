@@ -4,8 +4,8 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 
 const navigation = [
   { name: 'About Us', href: '/about' },
-  { name: 'Event', href: '' },
-  { name: 'Blog', href: '#' },
+  { name: 'Event', href: '/event' },
+  { name: 'Blog', href: 'https://medium.com/@lamongandev' },
 ]
 
 export default function Navbar() {
@@ -65,7 +65,7 @@ export default function Navbar() {
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
           <a
-            href="#"
+            href="https://www.instagram.com/lamongandev?igsh=MWk1dm5xNnloN2p5aA=="
             className="inline-flex items-center justify-center rounded-md border border-[#2A96CD] px-4 py-2.5 text-base font-semibold text-[#2A96CD] transition hover:bg-[#2A96CD] hover:text-white"
           >
             Hubungi Kami
@@ -108,7 +108,7 @@ export default function Navbar() {
               </div>
               <div className="py-6">
                 <a
-                  href="#"
+                  href="https://www.instagram.com/lamongandev?igsh=MWk1dm5xNnloN2p5aA=="
                   className="inline-flex w-full items-center justify-center rounded-md border border-[#2A96CD] px-4 py-2.5 text-base font-semibold text-[#2A96CD] transition hover:bg-[#2A96CD] hover:text-white"
                   onClick={() => setMobileMenuOpen(false)}
                 >

@@ -22,11 +22,11 @@ export default function Hero() {
       <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56 mt-4 sm:-mt-8">
         <div className="text-center">
             <div className="flex flex-col items-center gap-y-2">
-            <h1 className="text-5xl sm:text-6xl md:text-6xl lg:text-7xl font-semibold font-[var(--font-space-grotesk)] tracking-tight text-gray-900 text-balance md:whitespace-nowrap">
+            <h1 className="text-5xl sm:text-6xl md:text-6xl lg:text-7xl font-semibold tracking-tight text-gray-900 text-balance md:whitespace-nowrap">
         Komunitas IT Wong Lamongan,
         </h1>
         
-        <h1 className="text-5xl sm:text-6xl md:text-6xl lg:text-7xl font-semibold font-[var(--font-space-grotesk)] tracking-tight whitespace-nowrap">
+        <h1 className="text-5xl sm:text-6xl md:text-6xl lg:text-7xl font-semibold tracking-tight whitespace-nowrap">
           <span style={{ color: '#2A96CD' }}>Lamongan</span>
           <span style={{ color: '#8CC63F' }}>Dev</span>
         </h1>
@@ -42,8 +42,7 @@ export default function Hero() {
                     py-4 sm:py-4
                     text-sm sm:text-base
                     font-semibold text-white shadow-sm
-                    hover:bg-[#7BB336]
-                    focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
+                    hover:bg-[#7BB336] focus-visible:outline-2 focus-visible:outline-offset-2
   focus-visible:outline-[#8CC63F]"
                 >
                     Join Telegram
