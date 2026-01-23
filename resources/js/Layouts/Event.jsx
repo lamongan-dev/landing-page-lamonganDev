@@ -25,7 +25,7 @@ export default function Event() {
                         {events.map((event) => (
                             <article
                                 key={event.title}
-                                className="grid overflow-hidden rounded-2xl border border-emerald-100 bg-white shadow-lg shadow-emerald-100/60 md:grid-cols-[260px_1fr]"
+                                className="grid overflow-hidden rounded-2xl border border-white bg-white shadow-lg shadow-emerald-100/60 md:grid-cols-[260px_1fr]"
                             >
                                 <div className="relative h-60 md:h-full">
                                     <img
