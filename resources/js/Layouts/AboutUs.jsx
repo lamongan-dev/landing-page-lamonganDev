@@ -143,7 +143,7 @@ export default function AboutUs() {
                   <h3 className="mb-6 text-center text-2xl font-semibold text-gray-900">
                     {section.title}
                   </h3>
-                  <div className="grid w-full max-w-5xl justify-center justify-items-center gap-4 sm:grid-cols-2 lg:grid-cols-[repeat(auto-fit,260px)]">
+                  <div className="grid w-full max-w-5xl grid-cols-2 justify-center justify-items-center gap-4 sm:grid-cols-2 lg:grid-cols-[repeat(auto-fit,260px)]">
                     {section.members.map((member) => (
                       <div
                         key={member.name}
