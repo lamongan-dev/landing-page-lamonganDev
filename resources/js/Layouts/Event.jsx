@@ -1,10 +1,63 @@
-import React from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import Navbar from '../Components/Navbar'
 import Footer from '../Components/Footer'
-import { events } from '../dummy/event'
 
 export default function Event() {
-    
+    const [events, setEvents] = useState([])
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState('')
+
+    useEffect(() => {
+        let isMounted = true
+        fetch('/api/events')
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error('Gagal memuat event.')
+                }
+                return res.json()
+            })
+            .then((payload) => {
+                if (!isMounted) return
+                setEvents(Array.isArray(payload?.data) ? payload.data : [])
+            })
+            .catch((err) => {
+                if (!isMounted) return
+                setError(err.message || 'Gagal memuat event.')
+            })
+            .finally(() => {
+                if (!isMounted) return
+                setLoading(false)
+            })
+
+        return () => {
+            isMounted = false
+        }
+    }, [])
+
+    const formattedEvents = useMemo(() => {
+        return events.map((event) => {
+            let dateLabel = '-'
+            if (event.event_date) {
+                const parsed = new Date(event.event_date)
+                if (!Number.isNaN(parsed.getTime())) {
+                    dateLabel = new Intl.DateTimeFormat('id-ID', {
+                        dateStyle: 'medium',
+                        timeStyle: 'short',
+                    }).format(parsed)
+                }
+            }
+
+            return {
+                ...event,
+                dateLabel,
+                modeLabel: event.type === 'online' ? 'Online' : 'Offline',
+                pricingLabel: event.pricing_type === 'paid' ? 'Berbayar' : 'Gratis',
+                image: event.cover_image_url || '/images/poto1.jpg',
+                description: event.description || 'Belum ada deskripsi.',
+                location: event.location || 'Lamongan',
+            }
+        })
+    }, [events])
 
     return (
         <div className="flex min-h-screen flex-col bg-white">
@@ -22,9 +75,24 @@ export default function Event() {
                     </div>
 
                     <section className="mb-16 mt-14 grid gap-8 lg:grid-cols-2">
-                        {events.map((event) => (
+                        {loading && (
+                            <div className="col-span-full text-center text-sm text-slate-500">
+                                Memuat event...
+                            </div>
+                        )}
+                        {error && !loading && (
+                            <div className="col-span-full text-center text-sm text-rose-600">
+                                {error}
+                            </div>
+                        )}
+                        {!loading && !error && formattedEvents.length === 0 && (
+                            <div className="col-span-full text-center text-sm text-slate-500">
+                                Belum ada event yang tersedia.
+                            </div>
+                        )}
+                        {formattedEvents.map((event) => (
                             <article
-                                key={event.title}
+                                key={event.id || event.title}
                                 className="grid overflow-hidden rounded-2xl border border-white bg-white shadow-lg shadow-emerald-100/60 md:grid-cols-[260px_1fr]"
                             >
                                 <div className="relative h-60 md:h-full">
@@ -35,10 +103,10 @@ export default function Event() {
                                     />
                                     <div className="absolute left-4 top-4 flex flex-wrap gap-2">
                                         <span className="rounded-full border border-[#2A96CD] bg-white/95 px-3 py-1 text-xs font-semibold text-[#2A96CD]">
-                                            {event.mode} Event
+                                            {event.modeLabel} Event
                                         </span>
                                         <span className="rounded-full border border-[#2A96CD] bg-white/95 px-3 py-1 text-xs font-semibold text-[#2A96CD]">
-                                            {event.pricing}
+                                            {event.pricingLabel}
                                         </span>
                                     </div>
                                 </div>
@@ -48,7 +116,7 @@ export default function Event() {
                                             {event.title}
                                         </h3>
                                         <p className="mt-2 text-sm text-slate-500">
-                                            {event.date}
+                                            {event.dateLabel}
                                         </p>
                                     </div>
                                     <p className="text-sm text-slate-600">
@@ -59,12 +127,12 @@ export default function Event() {
                                             {event.location}
                                         </span>
                                     </div>
-                                    <button
-                                        className="mt-2 w-fit rounded-full  bg-[#2A96CD] px-5 py-2 text-sm font-semibold text-white transition hover:bg-emerald-700"
-                                        type="button"
+                                    <a
+                                        className="mt-2 w-fit rounded-full bg-[#2A96CD] px-5 py-2 text-sm font-semibold text-white transition hover:bg-emerald-700"
+                                        href={`/event/${event.slug}`}
                                     >
                                         Detail Event
-                                    </button>
+                                    </a>
                                 </div>
                             </article>
                         ))}

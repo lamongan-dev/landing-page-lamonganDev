@@ -1,35 +1,54 @@
 import './bootstrap';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+import { createInertiaApp } from '@inertiajs/react';
 import Home from './Pages/Home';
 import AboutUs from './Layouts/AboutUs';
 import Event from './Layouts/Event';
+import EventDetail from './Layouts/EventDetail';
 
 const rootElement = document.getElementById('app');
 
-console.log('App.jsx is running!');
-console.log('Root element:', rootElement);
-
-if (rootElement) {
-    try {
-        const path = window.location.pathname;
-        const routes = {
-            '/about': { component: AboutUs, title: 'About Us' },
-            '/event': { component: Event, title: 'Event' },
-        };
-        const route = routes[path] || { component: Home, title: 'LamonganDev' };
-        const Page = route.component;
-        document.title = route.title;
-        const root = createRoot(rootElement);
-        root.render(
+if (rootElement?.dataset?.page) {
+    createInertiaApp({
+        resolve: (name) => {
+            const pages = import.meta.glob('./Pages/**/*.jsx', { eager: true });
+            return pages[`./Pages/${name}.jsx`];
+        },
+        setup({ el, App, props }) {
+            createRoot(el).render(
+                <React.StrictMode>
+                    <App {...props} />
+                </React.StrictMode>
+            );
+        },
+        progress: { color: '#0f172a' },
+    });
+} else if (rootElement) {
+    const path = window.location.pathname;
+    const eventDetailMatch = path.match(/^\/event\/([^/]+)$/);
+    const routes = {
+        '/about': { component: AboutUs, title: 'About Us' },
+        '/event': { component: Event, title: 'Event' },
+    };
+    if (eventDetailMatch) {
+        const slug = eventDetailMatch[1];
+        const Page = () => <EventDetail slug={slug} />;
+        document.title = 'Event Detail';
+        createRoot(rootElement).render(
             <React.StrictMode>
                 <Page />
             </React.StrictMode>
         );
-        console.log('React rendered successfully');
-    } catch (e) {
-        console.error('React render error:', e);
+        return;
     }
-} else {
-    console.error('Root element #app not found!');
+
+    const route = routes[path] || { component: Home, title: 'LamonganDev' };
+    const Page = route.component;
+    document.title = route.title;
+    createRoot(rootElement).render(
+        <React.StrictMode>
+            <Page />
+        </React.StrictMode>
+    );
 }
