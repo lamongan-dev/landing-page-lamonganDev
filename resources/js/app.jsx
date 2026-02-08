@@ -40,15 +40,14 @@ if (rootElement?.dataset?.page) {
                 <Page />
             </React.StrictMode>
         );
-        return;
+    } else {
+        const route = routes[path] || { component: Home, title: 'LamonganDev' };
+        const Page = route.component;
+        document.title = route.title;
+        createRoot(rootElement).render(
+            <React.StrictMode>
+                <Page />
+            </React.StrictMode>
+        );
     }
-
-    const route = routes[path] || { component: Home, title: 'LamonganDev' };
-    const Page = route.component;
-    document.title = route.title;
-    createRoot(rootElement).render(
-        <React.StrictMode>
-            <Page />
-        </React.StrictMode>
-    );
 }
