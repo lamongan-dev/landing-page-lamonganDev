@@ -142,20 +142,22 @@ class EventController extends Controller
     public function update(Request $request, Event $event): RedirectResponse
     {
         $validated = $request->validate([
-            'type' => ['sometimes', 'nullable', 'in:offline,online'],
-            'title' => ['sometimes', 'nullable', 'string', 'max:255'],
-            'pricing_type' => ['sometimes', 'nullable', 'in:free,paid'],
-            'event_date' => ['sometimes', 'nullable', 'date'],
+            'type' => ['sometimes', 'in:offline,online'],
+            'title' => ['sometimes', 'string', 'max:255'],
+            'pricing_type' => ['sometimes', 'in:free,paid'],
+            'event_date' => ['sometimes', 'date'],
             'cover_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
-            'location' => ['nullable', 'string', 'max:255', 'required_if:type,offline'],
-            'description' => ['nullable', 'string'],
+            'location' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'description' => ['sometimes', 'nullable', 'string'],
         ]);
 
-        $description = $request->input('description');
-        if ($description !== null) {
-            $description = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $description);
+        if (array_key_exists('description', $validated)) {
+            $validated['description'] = preg_replace(
+                '#<script(.*?)>(.*?)</script>#is',
+                '',
+                (string) $validated['description']
+            );
         }
-        $hasDescription = $request->exists('description');
 
         $newCoverPath = null;
         $oldCoverPath = $event->cover_image_path;
@@ -164,17 +166,10 @@ class EventController extends Controller
         try {
             if ($request->hasFile('cover_image')) {
                 $newCoverPath = $request->file('cover_image')->store('events', 'public');
+                $validated['cover_image_path'] = $newCoverPath;
             }
 
-            $event->update([
-                'type' => $validated['type'] ?? $event->type,
-                'title' => $validated['title'] ?? $event->title,
-                'pricing_type' => $validated['pricing_type'] ?? $event->pricing_type,
-                'event_date' => $validated['event_date'] ?? $event->event_date,
-                'cover_image_path' => $newCoverPath ?: $oldCoverPath,
-                'location' => array_key_exists('location', $validated) ? $validated['location'] : $event->location,
-                'description' => $hasDescription ? $description : $event->description,
-            ]);
+            $event->update($validated);
 
             DB::commit();
         } catch (\Throwable $e) {

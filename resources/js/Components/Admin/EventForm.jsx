@@ -10,9 +10,13 @@ export default function EventForm({
     existingCoverUrl,
 }) {
     const isOffline = data.type === 'offline';
+    const handleSubmit = (e) => {
+        if (e?.preventDefault) e.preventDefault();
+        onSubmit?.(e);
+    };
 
     return (
-        <form onSubmit={onSubmit} className="space-y-6 rounded-2xl border border-sky-100 bg-white/80 p-6 backdrop-blur">
+        <form onSubmit={handleSubmit} className="space-y-6 rounded-2xl border border-sky-100 bg-white/80 p-6 backdrop-blur">
             {errors?.general && (
                 <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
                     {errors.general}
@@ -113,7 +117,8 @@ export default function EventForm({
 
             <div className="flex items-center justify-end gap-3">
                 <button
-                    type="submit"
+                    type="button"
+                    onClick={handleSubmit}
                     disabled={processing}
                     className="rounded-full bg-[#8CC63F] px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#7BB336] disabled:cursor-not-allowed disabled:opacity-60"
                 >
