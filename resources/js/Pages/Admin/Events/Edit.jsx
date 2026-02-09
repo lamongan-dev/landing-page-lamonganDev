@@ -4,7 +4,7 @@ import AdminLayout from '../../../Layouts/AdminLayout';
 import EventForm from '../../../Components/Admin/EventForm';
 
 export default function Edit({ event }) {
-    const { data, setData, post, put, processing, errors, reset } = useForm({
+    const { data, setData, post, processing, errors, reset } = useForm({
         type: event.type || 'offline',
         title: event.title || '',
         pricing_type: event.pricing_type || 'free',
@@ -16,26 +16,16 @@ export default function Edit({ event }) {
 
     const submit = (e) => {
         e.preventDefault();
-        const url = `/admin/events/${event.id}`;
-        const hasFile = data.cover_image instanceof File;
-
-        if (hasFile) {
-            post(url, {
-                forceFormData: true,
-                preserveScroll: true,
-                transform: (formData) => ({
-                    ...formData,
-                    _method: 'put',
-                }),
-                onSuccess: () => {
-                    reset('cover_image');
-                },
-            });
-            return;
-        }
-
-        put(url, {
+        post(`/admin/events/${event.id}`, {
+            forceFormData: true,
             preserveScroll: true,
+            transform: (formData) => {
+                const payload = { ...formData, _method: 'put' };
+                if (!(payload.cover_image instanceof File)) {
+                    delete payload.cover_image;
+                }
+                return payload;
+            },
             onSuccess: () => {
                 reset('cover_image');
             },
