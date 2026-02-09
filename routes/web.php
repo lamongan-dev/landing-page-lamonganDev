@@ -43,4 +43,6 @@ Route::middleware(['auth'])
     ->name('admin.')
     ->group(function () {
         Route::resource('events', EventController::class);
+        Route::post('events/{event}', [EventController::class, 'update'])
+            ->name('events.update.post');
     });
