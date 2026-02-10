@@ -127,12 +127,26 @@ export default function Event() {
                                             {event.location}
                                         </span>
                                     </div>
-                                    <a
-                                        className="mt-2 w-fit rounded-full bg-[#2A96CD] px-5 py-2 text-sm font-semibold text-white transition hover:bg-emerald-700"
-                                        href={`/event/${event.slug}`}
-                                    >
-                                        Detail Event
-                                    </a>
+                                    {event.registration_url ? (
+                                        <a
+                                            className="mt-2 w-fit rounded-full bg-[#2A96CD] px-5 py-2 text-sm font-semibold text-white transition hover:bg-emerald-700"
+                                            href={event.registration_url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            aria-label={`Detail event ${event.title}`}
+                                        >
+                                            Detail Event
+                                        </a>
+                                    ) : (
+                                        <button
+                                            type="button"
+                                            disabled
+                                            aria-label={`Detail event ${event.title} belum tersedia`}
+                                            className="mt-2 w-fit rounded-full border border-slate-200 bg-slate-100 px-5 py-2 text-sm font-semibold text-slate-400"
+                                        >
+                                            Detail Event
+                                        </button>
+                                    )}
                                 </div>
                             </article>
                         ))}

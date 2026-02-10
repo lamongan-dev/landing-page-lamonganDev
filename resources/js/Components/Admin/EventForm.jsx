@@ -89,6 +89,20 @@ export default function EventForm({
             </div>
 
             <div>
+                <label className="mb-2 block text-sm font-semibold text-slate-700">URL Pendaftaran Event</label>
+                <input
+                    type="url"
+                    placeholder="https://example.com/register-event"
+                    className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm focus:border-[#2A96CD] focus:outline-none focus:ring-2 focus:ring-[#2A96CD]/20"
+                    value={data.registration_url || ''}
+                    onChange={(e) => setData('registration_url', e.target.value)}
+                />
+                {errors?.registration_url && (
+                    <p className="mt-1 text-xs text-rose-600">{errors.registration_url}</p>
+                )}
+            </div>
+
+            <div>
                 <label className="mb-2 block text-sm font-semibold text-slate-700">Cover Image</label>
                 {existingCoverUrl && (
                     <div className="mb-3 overflow-hidden rounded-2xl border border-sky-100 bg-white">

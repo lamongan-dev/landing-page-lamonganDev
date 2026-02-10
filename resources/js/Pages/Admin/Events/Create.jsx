@@ -12,6 +12,7 @@ export default function Create() {
         cover_image: null,
         location: '',
         description: '',
+        registration_url: '',
     });
 
     const submit = (e) => {

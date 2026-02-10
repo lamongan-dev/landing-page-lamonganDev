@@ -4,28 +4,43 @@ import AdminLayout from '../../../Layouts/AdminLayout';
 import EventForm from '../../../Components/Admin/EventForm';
 
 export default function Edit({ event }) {
-    const { data, setData, post, processing, errors, reset } = useForm({
+    const formatDateTimeLocal = (value) => {
+        if (!value) return '';
+        return value.slice(0, 16);
+    };
+
+    const { data, setData, post, put, processing, errors, reset } = useForm({
         type: event.type || 'offline',
         title: event.title || '',
         pricing_type: event.pricing_type || 'free',
-        event_date: event.event_date || '',
+        event_date: formatDateTimeLocal(event.event_date),
         cover_image: null,
         location: event.location || '',
         description: event.description || '',
+        registration_url: event.registration_url || '',
     });
 
     const submit = (e) => {
         e.preventDefault();
-        post(`/admin/events/${event.id}`, {
-            forceFormData: true,
+        const hasFile = data.cover_image instanceof File;
+
+        if (hasFile) {
+            post(`/admin/events/${event.id}`, {
+                forceFormData: true,
+                preserveScroll: true,
+                transform: (formData) => {
+                    const payload = { ...formData, _method: 'put' };
+                    return payload;
+                },
+                onSuccess: () => {
+                    reset('cover_image');
+                },
+            });
+            return;
+        }
+
+        put(`/admin/events/${event.id}`, {
             preserveScroll: true,
-            transform: (formData) => {
-                const payload = { ...formData, _method: 'put' };
-                if (!(payload.cover_image instanceof File)) {
-                    delete payload.cover_image;
-                }
-                return payload;
-            },
             onSuccess: () => {
                 reset('cover_image');
             },

@@ -25,6 +25,7 @@ class EventPublicController extends Controller
                     'description' => Str::limit(strip_tags($event->description ?? ''), 180),
                     'cover_image_url' => $event->cover_image_url,
                     'slug' => $event->slug,
+                    'registration_url' => $event->registration_url,
                 ];
             })
             ->values();
@@ -51,6 +52,7 @@ class EventPublicController extends Controller
                 'description' => $event->description,
                 'cover_image_url' => $event->cover_image_url,
                 'slug' => $event->slug,
+                'registration_url' => $event->registration_url,
             ],
         ]);
     }

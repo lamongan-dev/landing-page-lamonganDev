@@ -17,9 +17,6 @@ Route::get('/about', function () {
 Route::get('/event', function () {
     return view('welcome');
 });
-Route::get('/event/{slug}', function () {
-    return view('welcome');
-});
 
 Route::match(['GET','POST'], '/_boost/browser-logs', function (Request $request) {
     return response()->json(['ok' => true]);

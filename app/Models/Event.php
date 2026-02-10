@@ -17,6 +17,7 @@ class Event extends Model
         'location',
         'description',
         'slug',
+        'registration_url'
     ];
 
     protected $casts = [

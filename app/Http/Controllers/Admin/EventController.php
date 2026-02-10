@@ -64,6 +64,7 @@ class EventController extends Controller
             'cover_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
             'location' => ['nullable', 'string', 'max:255', 'required_if:type,offline'],
             'description' => ['nullable', 'string'],
+            'registration_url' => ['nullable', 'url', 'max:255'],
         ]);
 
         $description = $request->input('description');
@@ -87,6 +88,7 @@ class EventController extends Controller
                 'cover_image_path' => $coverPath,
                 'location' => $validated['location'] ?? null,
                 'description' => $description,
+                'registration_url' => $validated['registration_url'] ?? null,
             ]);
 
             DB::commit();
@@ -135,6 +137,7 @@ class EventController extends Controller
                 'cover_image_url' => $event->cover_image_url,
                 'location' => $event->location,
                 'description' => $event->description,
+                'registration_url' => $event->registration_url,
             ],
         ]);
     }
@@ -146,9 +149,10 @@ class EventController extends Controller
             'title' => ['sometimes', 'string', 'max:255'],
             'pricing_type' => ['sometimes', 'in:free,paid'],
             'event_date' => ['sometimes', 'date'],
-            'cover_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
-            'location' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'cover_image' => ['sometimes', 'nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'location' => ['sometimes', 'nullable', 'string', 'max:255', 'required_if:type,offline'],
             'description' => ['sometimes', 'nullable', 'string'],
+            'registration_url' => ['sometimes', 'nullable', 'url', 'max:255'],
         ]);
 
         if (array_key_exists('description', $validated)) {
